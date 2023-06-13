@@ -12,6 +12,7 @@ import wx.xrc
 import json
 import os
 import appdirs
+import webbrowser
 
 print("Imported all libraries")
 
@@ -97,11 +98,19 @@ class MainFrame(wx.Frame):
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
 
+        icon = wx.Icon("icon.ico", wx.BITMAP_TYPE_ICO)
+        self.SetIcon(icon)
+
         MainSizer = wx.BoxSizer(wx.VERTICAL)
 
         self.MainText = wx.TextCtrl(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, -1),
                                     wx.HSCROLL | wx.TE_MULTILINE)
-        #self.MainText.SetStyle(wx.TextAttr(font=wx.Font(self.settings["font-family"].GetPointSize())))
+        self.MainText.SetForegroundColour(self.settings["font-color"])
+        self.MainText.SetFont(wx.Font(self.settings["font-family"]))
+        font = self.MainText.GetFont()
+        font.SetPointSize(self.settings["font-size"])
+        self.MainText.SetFont(font)
+
         self.MainText.SetMaxSize(wx.Size(1600, 900))
 
         MainSizer.Add(self.MainText, 1, wx.ALL | wx.EXPAND, 5)
@@ -223,7 +232,8 @@ class MainFrame(wx.Frame):
         print("Created settings window")
 
     def MenuItem_Creator_Func(self, event):
-        event.Skip()
+        url = "https://instagram.com/error_in_user.name?igshid=MzNlNGNkZWQ4Mg=="
+        webbrowser.open(url)
 
 
 class SettingsFrame(wx.Frame):
@@ -303,6 +313,9 @@ class SettingsFrame(wx.Frame):
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
 
+        icon = wx.Icon("icon.ico", wx.BITMAP_TYPE_ICO)
+        self.SetIcon(icon)
+
         MainSizer = wx.GridSizer(0, 2, 0, 0)
 
         self.FontSizeLabel = wx.StaticText(self, wx.ID_ANY, self.labels["Font Size"], wx.DefaultPosition, wx.DefaultSize, 0)
@@ -363,7 +376,18 @@ class SettingsFrame(wx.Frame):
 
     # Virtual event handlers, override them in your derived class
     def ResetButton_Func(self, event):
-        event.Skip()
+        self.settings = {
+            "font-size": 16,
+            "font-family": "Default",
+            "font-color": "ButtonText",
+            "language": "English"
+        }
+
+        print("Reseted settings to default.")
+        save_settings(self.settings)
+        print("Settings have been saved.")
+        print(self.settings)
+        wx.MessageBox(self.labels["Settings have been saved"])
 
     def ApplyButton_Func(self, event):
 
@@ -374,7 +398,7 @@ class SettingsFrame(wx.Frame):
         color_string = selected_color.GetAsString(wx.C2S_HTML_SYNTAX)
 
         settings = {
-            "font-size": self.FontSizeSizer.GetValue(),
+            "font-size": int(self.FontSizeSizer.GetValue()),
             "font-family": font_face,
             "font-color": color_string,
             "language": self.LanguageChoice.GetStringSelection()
