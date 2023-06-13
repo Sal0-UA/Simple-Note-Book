@@ -371,6 +371,11 @@ class SettingsFrame(wx.Frame):
         self.ApplyButton.Bind(wx.EVT_BUTTON, self.ApplyButton_Func)
         print("Created settings window.")
 
+        self.FontSizeSizer.SetValue(self.settings["font-size"])
+        self.FontPicker3.SetFont(wx.Font(self.settings["font-family"]))
+        self.ColourPicker.SetColour(self.settings["font-color"])
+        self.LanguageChoice.SetStringSelection(self.settings["language"])
+
     def __del__(self):
         pass
 
