@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-###########################################################################
-## Python code generated with wxFormBuilder (version 3.10.1-0-g8feb16b3)
-## http://www.wxformbuilder.org/
-##
-## PLEASE DO *NOT* EDIT THIS FILE!
-###########################################################################
-
 import wx
 import wx.xrc
 import json
@@ -16,28 +7,29 @@ import webbrowser
 
 print("Imported all libraries")
 
-
-###########################################################################
 # Class MainFrame
-###########################################################################
+
 
 class MainFrame(wx.Frame):
 
     def __init__(self, parent):
 
+        # loaded settings from json file
         self.settings = load_settings()
         print("Loaded settings")
         print(self.settings)
 
+        # if settings are empty, restorings to default
         if self.settings is None:
             self.settings = {
-                "font-size": 16,
+                "font-size": 11,
                 "font-family": "Default",
                 "font-color": "ButtonText",
                 "language": "English"
             }
             print("Settings is NONE. Loading default settings.")
 
+        # changing labels text to Ukrainian language
         if self.settings["language"] == "Ukrainian":
             self.labels = {
                 "New": "Новий файл",
@@ -65,6 +57,8 @@ class MainFrame(wx.Frame):
                 "Settings have been saved": "Налаштування збережено",
             }
             print("Loaded UKRAINIAN UI.")
+
+        # loading default localization
         else:
             self.labels = {
                 "New": "New",
@@ -93,8 +87,10 @@ class MainFrame(wx.Frame):
             }
             print("Loaded ENGLISH UI.")
 
-        wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=u"SimpleNoteBook", pos=wx.DefaultPosition, size=wx.Size(595, 399),
-                          style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
+        # creating main window
+
+        wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=u"SimpleNoteBook", pos=wx.DefaultPosition,
+                          size=wx.Size(595, 399), style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
 
@@ -128,19 +124,22 @@ class MainFrame(wx.Frame):
         self.MenuItem_Save = wx.MenuItem(self.FileMenu, wx.ID_ANY, self.labels["Save"], wx.EmptyString, wx.ITEM_NORMAL)
         self.FileMenu.Append(self.MenuItem_Save)
 
-        self.MenuItem_SaveAs = wx.MenuItem(self.FileMenu, wx.ID_ANY, self.labels["Save As"], wx.EmptyString, wx.ITEM_NORMAL)
+        self.MenuItem_SaveAs = wx.MenuItem(self.FileMenu, wx.ID_ANY, self.labels["Save As"], wx.EmptyString,
+                                           wx.ITEM_NORMAL)
         self.FileMenu.Append(self.MenuItem_SaveAs)
 
         self.MenuBar.Append(self.FileMenu, self.labels["File"])
 
         self.EditMenu = wx.Menu()
-        self.MenuItem_Settings = wx.MenuItem(self.EditMenu, wx.ID_ANY, self.labels["Settings"], wx.EmptyString, wx.ITEM_NORMAL)
+        self.MenuItem_Settings = wx.MenuItem(self.EditMenu, wx.ID_ANY, self.labels["Settings"], wx.EmptyString,
+                                             wx.ITEM_NORMAL)
         self.EditMenu.Append(self.MenuItem_Settings)
 
         self.MenuBar.Append(self.EditMenu, self.labels["Edit"])
 
         self.InfoMenu = wx.Menu()
-        self.MenuItem_Creator = wx.MenuItem(self.InfoMenu, wx.ID_ANY, self.labels["Creator"], wx.EmptyString, wx.ITEM_NORMAL)
+        self.MenuItem_Creator = wx.MenuItem(self.InfoMenu, wx.ID_ANY, self.labels["Creator"], wx.EmptyString,
+                                            wx.ITEM_NORMAL)
         self.InfoMenu.Append(self.MenuItem_Creator)
 
         self.MenuBar.Append(self.InfoMenu, self.labels["Info"])
@@ -163,7 +162,7 @@ class MainFrame(wx.Frame):
     def __del__(self):
         pass
 
-    # Virtual event handlers, override them in your derived class
+    # Virtual event handlers
     def MenuItem_New_Func(self, event):
         self.MainText.Clear()
         self.file_path = None
@@ -236,6 +235,9 @@ class MainFrame(wx.Frame):
         webbrowser.open(url)
 
 
+# class SettingsFrame
+
+
 class SettingsFrame(wx.Frame):
 
     def __init__(self, parent):
@@ -246,7 +248,7 @@ class SettingsFrame(wx.Frame):
 
         if self.settings is None:
             self.settings = {
-                "font-size": 16,
+                "font-size": 11,
                 "font-family": "Default",
                 "font-color": "ButtonText",
                 "language": "English"
@@ -308,7 +310,8 @@ class SettingsFrame(wx.Frame):
             }
             print("Laded ENGLISH UI")
 
-        wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=self.labels["Settings"], pos=wx.DefaultPosition, size=wx.Size(253, 249),
+        wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=self.labels["Settings"], pos=wx.DefaultPosition,
+                          size=wx.Size(253, 249),
                           style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
@@ -318,16 +321,18 @@ class SettingsFrame(wx.Frame):
 
         MainSizer = wx.GridSizer(0, 2, 0, 0)
 
-        self.FontSizeLabel = wx.StaticText(self, wx.ID_ANY, self.labels["Font Size"], wx.DefaultPosition, wx.DefaultSize, 0)
+        self.FontSizeLabel = wx.StaticText(self, wx.ID_ANY, self.labels["Font Size"], wx.DefaultPosition,
+                                           wx.DefaultSize, 0)
         self.FontSizeLabel.Wrap(-1)
 
         MainSizer.Add(self.FontSizeLabel, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
 
-        self.FontSizeSizer = wx.Slider(self, wx.ID_ANY, 18, 0, 100, wx.DefaultPosition, wx.DefaultSize,
-                                       wx.SL_HORIZONTAL)
-        MainSizer.Add(self.FontSizeSizer, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
+        self.FontSizeSpin = wx.SpinCtrl(self, wx.ID_ANY, u"12", wx.DefaultPosition, wx.DefaultSize, wx.SP_ARROW_KEYS, 5,
+                                        50, 0)
+        MainSizer.Add(self.FontSizeSpin, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
 
-        self.FontFamilyLabel = wx.StaticText(self, wx.ID_ANY, self.labels["Font Family"], wx.DefaultPosition, wx.DefaultSize, 0)
+        self.FontFamilyLabel = wx.StaticText(self, wx.ID_ANY, self.labels["Font Family"], wx.DefaultPosition,
+                                             wx.DefaultSize, 0)
         self.FontFamilyLabel.Wrap(-1)
 
         MainSizer.Add(self.FontFamilyLabel, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
@@ -336,7 +341,8 @@ class SettingsFrame(wx.Frame):
         self.FontPicker3.SetMaxPointSize(100)
         MainSizer.Add(self.FontPicker3, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
 
-        self.FontColorLabel = wx.StaticText(self, wx.ID_ANY, self.labels["Font Color"], wx.DefaultPosition, wx.DefaultSize, 0)
+        self.FontColorLabel = wx.StaticText(self, wx.ID_ANY, self.labels["Font Color"], wx.DefaultPosition,
+                                            wx.DefaultSize, 0)
         self.FontColorLabel.Wrap(-1)
 
         MainSizer.Add(self.FontColorLabel, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
@@ -345,7 +351,8 @@ class SettingsFrame(wx.Frame):
                                                 wx.CLRP_DEFAULT_STYLE)
         MainSizer.Add(self.ColourPicker, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
 
-        self.LanguageChoiceLabel = wx.StaticText(self, wx.ID_ANY, self.labels["Language"], wx.DefaultPosition, wx.DefaultSize, 0)
+        self.LanguageChoiceLabel = wx.StaticText(self, wx.ID_ANY, self.labels["Language"], wx.DefaultPosition,
+                                                 wx.DefaultSize, 0)
         self.LanguageChoiceLabel.Wrap(-1)
 
         MainSizer.Add(self.LanguageChoiceLabel, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
@@ -371,7 +378,7 @@ class SettingsFrame(wx.Frame):
         self.ApplyButton.Bind(wx.EVT_BUTTON, self.ApplyButton_Func)
         print("Created settings window.")
 
-        self.FontSizeSizer.SetValue(self.settings["font-size"])
+        self.FontSizeSpin.SetValue(self.settings["font-size"])
         self.FontPicker3.SetFont(wx.Font(self.settings["font-family"]))
         self.ColourPicker.SetColour(self.settings["font-color"])
         self.LanguageChoice.SetStringSelection(self.settings["language"])
@@ -382,7 +389,7 @@ class SettingsFrame(wx.Frame):
     # Virtual event handlers, override them in your derived class
     def ResetButton_Func(self, event):
         self.settings = {
-            "font-size": 16,
+            "font-size": 11,
             "font-family": "Default",
             "font-color": "ButtonText",
             "language": "English"
@@ -403,7 +410,7 @@ class SettingsFrame(wx.Frame):
         color_string = selected_color.GetAsString(wx.C2S_HTML_SYNTAX)
 
         settings = {
-            "font-size": int(self.FontSizeSizer.GetValue()),
+            "font-size": int(self.FontSizeSpin.GetValue()),
             "font-family": font_face,
             "font-color": color_string,
             "language": self.LanguageChoice.GetStringSelection()
@@ -445,11 +452,16 @@ def load_settings():
     return None
 
 
+# creating MainApp class
+
+
 class MainApp(wx.App):
     def OnInit(self):
         mainFrame = MainFrame(None)
         mainFrame.Show(True)
         return True
+
+# launching app
 
 
 if __name__ == "__main__":
