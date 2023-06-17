@@ -23,7 +23,6 @@ class MainFrame(wx.Frame):
         if self.settings is None:
             self.settings = {
                 "font-size": 11,
-                "font-family": "Default",
                 "font-color": "ButtonText",
                 "language": "English"
             }
@@ -102,7 +101,6 @@ class MainFrame(wx.Frame):
         self.MainText = wx.TextCtrl(self, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size(-1, -1),
                                     wx.HSCROLL | wx.TE_MULTILINE)
         self.MainText.SetForegroundColour(self.settings["font-color"])
-        self.MainText.SetFont(wx.Font(self.settings["font-family"]))
         font = self.MainText.GetFont()
         font.SetPointSize(self.settings["font-size"])
         self.MainText.SetFont(font)
@@ -249,7 +247,6 @@ class SettingsFrame(wx.Frame):
         if self.settings is None:
             self.settings = {
                 "font-size": 11,
-                "font-family": "Default",
                 "font-color": "ButtonText",
                 "language": "English"
             }
@@ -331,16 +328,6 @@ class SettingsFrame(wx.Frame):
                                         50, 0)
         MainSizer.Add(self.FontSizeSpin, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
 
-        self.FontFamilyLabel = wx.StaticText(self, wx.ID_ANY, self.labels["Font Family"], wx.DefaultPosition,
-                                             wx.DefaultSize, 0)
-        self.FontFamilyLabel.Wrap(-1)
-
-        MainSizer.Add(self.FontFamilyLabel, 0, wx.ALL | wx.ALIGN_CENTER_HORIZONTAL, 5)
-
-        self.FontPicker3 = wx.FontPickerCtrl(self, wx.ID_ANY, wx.NullFont, wx.DefaultPosition, wx.DefaultSize, 0)
-        self.FontPicker3.SetMaxPointSize(100)
-        MainSizer.Add(self.FontPicker3, 0, wx.ALIGN_CENTER_HORIZONTAL | wx.ALL, 5)
-
         self.FontColorLabel = wx.StaticText(self, wx.ID_ANY, self.labels["Font Color"], wx.DefaultPosition,
                                             wx.DefaultSize, 0)
         self.FontColorLabel.Wrap(-1)
@@ -379,7 +366,6 @@ class SettingsFrame(wx.Frame):
         print("Created settings window.")
 
         self.FontSizeSpin.SetValue(self.settings["font-size"])
-        self.FontPicker3.SetFont(wx.Font(self.settings["font-family"]))
         self.ColourPicker.SetColour(self.settings["font-color"])
         self.LanguageChoice.SetStringSelection(self.settings["language"])
 
@@ -390,7 +376,6 @@ class SettingsFrame(wx.Frame):
     def ResetButton_Func(self, event):
         self.settings = {
             "font-size": 11,
-            "font-family": "Default",
             "font-color": "ButtonText",
             "language": "English"
         }
@@ -402,16 +387,11 @@ class SettingsFrame(wx.Frame):
         wx.MessageBox(self.labels["Settings have been saved"])
 
     def ApplyButton_Func(self, event):
-
-        selected_font = self.FontPicker3.GetSelectedFont()
-        font_face = selected_font.GetFaceName()
-
         selected_color = self.ColourPicker.GetColour()
         color_string = selected_color.GetAsString(wx.C2S_HTML_SYNTAX)
 
         settings = {
             "font-size": int(self.FontSizeSpin.GetValue()),
-            "font-family": font_face,
             "font-color": color_string,
             "language": self.LanguageChoice.GetStringSelection()
         }
